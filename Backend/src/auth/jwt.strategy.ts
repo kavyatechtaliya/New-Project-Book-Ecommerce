@@ -8,13 +8,11 @@ import { ConfigService } from '@nestjs/config';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private config: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // read "Bearer <token>"
-      ignoreExpiration: false,
-      secretOrKey: config.get<string>('JWT_SECRET')!, // add "!" to assert it's not undefined
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: config.get<string>('JWT_SECRET')!, 
     });
   }
 
-  // validate runs when a JWT is valid; return value attaches to request.user
   async validate(payload: any) {
     return { userId: payload.sub, email: payload.email, role: payload.role };
   }
